@@ -17,12 +17,13 @@
 /**
  * Display a greeting to the current user.
  *
- * @package     local_greetings
  * @copyright   2026 Phung Vo <phung.voanh@moodle.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     local_greetings
  */
 
 require_once('../../config.php');
+require_once($CFG->dirroot . '/local/greetings/lib.php');
 
 require_login();
 
@@ -34,7 +35,7 @@ $PAGE->set_title(get_string('pluginname', 'local_greetings'));
 $PAGE->set_heading(get_string('pluginname', 'local_greetings'));
 
 echo $OUTPUT->header();
-$usergreeting = 'Greetings, ' . fullname($USER);
+$usergreeting = local_greetings_get_greeting($USER);
 $templatedata = ['usergreeting' => $usergreeting];
 echo $OUTPUT->render_from_template('local_greetings/greeting_message', $templatedata);
 echo $OUTPUT->footer();
