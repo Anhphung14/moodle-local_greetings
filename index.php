@@ -85,9 +85,11 @@ echo $OUTPUT->render_from_template('local_greetings/greeting_message', $template
 if ($allowpost) {
     $messageform->display();
 }
+$cardbackgroundcolor = get_config('local_greetings', 'messagecardbgcolor');
 $templatedata = [
     'messages' => array_values($messages),
     'candeleteany' => $deleteanypost,
+    'cardbackgroundcolor' => $cardbackgroundcolor,
 ];
 echo $OUTPUT->render_from_template('local_greetings/messages', $templatedata);
 echo $OUTPUT->footer();
