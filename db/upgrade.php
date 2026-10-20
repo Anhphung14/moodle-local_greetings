@@ -33,7 +33,7 @@
 function xmldb_local_greetings_upgrade($oldversion) {
     global $DB;
     $dbman = $DB->get_manager();
-    if ($oldversion < 2026102000) {
+    if ($oldversion < 2026102002) {
         // Define field id to be added to local_greetings_messages.
         $table = new xmldb_table('local_greetings_messages');
         $field = new xmldb_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null, null);
@@ -44,7 +44,7 @@ function xmldb_local_greetings_upgrade($oldversion) {
         }
 
         // Greetings savepoint reached.
-        upgrade_plugin_savepoint(true, 2026102000, 'local', 'greetings');
+        upgrade_plugin_savepoint(true, 2026102002, 'local', 'greetings');
     }
 
     return true;

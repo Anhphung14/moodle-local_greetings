@@ -39,7 +39,22 @@ $PAGE->set_heading(get_string('pluginname', 'local_greetings'));
 require_login();
 
 $messageform = new \local_greetings\form\message_form();
+$action = optional_param('action', '', PARAM_TEXT);
+
+if ($action == 'del') {
+    require_capability('local/greetings:deleteanymessage', $context);
+
+    $id = required_param('id', PARAM_INT);
+
+    if ($deleteanypost) {
+        $DB->delete_records('local_greetings_messages', ['id' => $id]);
+    }
+}
+$allowpost = has_capability('local/greetings:postmessages', $context);
+$deleteanypost = has_capability('local/greetings:deleteanymessage', $context);
 if ($data = $messageform->get_data()) {
+    require_capability('local/greetings:postmessages', $context);
+
     $message = trim($data->message);
 
     if ($message !== '') {
@@ -66,7 +81,12 @@ echo $OUTPUT->header();
 $usergreeting = local_greetings_get_greeting($USER);
 $templatedata = ['usergreeting' => $usergreeting];
 echo $OUTPUT->render_from_template('local_greetings/greeting_message', $templatedata);
-$messageform->display();
-$templatedata = ['messages' => array_values($messages)];
+if ($allowpost) {
+    $messageform->display();
+}
+$templatedata = [
+    'messages' => array_values($messages),
+    'candeleteany' => $deleteanypost,
+];
 echo $OUTPUT->render_from_template('local_greetings/messages', $templatedata);
 echo $OUTPUT->footer();
