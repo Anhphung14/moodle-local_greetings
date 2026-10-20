@@ -39,19 +39,19 @@ $PAGE->set_heading(get_string('pluginname', 'local_greetings'));
 require_login();
 
 $messageform = new \local_greetings\form\message_form();
+$allowpost = has_capability('local/greetings:postmessages', $context);
+$deleteanypost = has_capability('local/greetings:deleteanymessage', $context);
 $action = optional_param('action', '', PARAM_TEXT);
 
 if ($action == 'del') {
+    require_sesskey();
     require_capability('local/greetings:deleteanymessage', $context);
 
     $id = required_param('id', PARAM_INT);
-
-    if ($deleteanypost) {
-        $DB->delete_records('local_greetings_messages', ['id' => $id]);
-    }
+    $DB->delete_records('local_greetings_messages', ['id' => $id]);
+    redirect($PAGE->url);
 }
-$allowpost = has_capability('local/greetings:postmessages', $context);
-$deleteanypost = has_capability('local/greetings:deleteanymessage', $context);
+
 if ($data = $messageform->get_data()) {
     require_capability('local/greetings:postmessages', $context);
 
@@ -64,6 +64,7 @@ if ($data = $messageform->get_data()) {
         $record->userid = $USER->id;
 
         $DB->insert_record('local_greetings_messages', $record);
+        redirect($PAGE->url);
     }
 }
 
