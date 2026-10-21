@@ -16,6 +16,8 @@
 
 namespace local_greetings;
 
+defined('MOODLE_INTERNAL') || die();
+
 global $CFG;
 require_once($CFG->dirroot . '/local/greetings/lib.php');
 
@@ -38,6 +40,11 @@ final class lib_test extends \advanced_testcase {
         $this->assertNotEmpty(get_config('local_greetings', 'version'));
     }
 
+    /**
+     * Tests the greeting for a null user.
+     *
+     * @covers ::local_greetings_get_greeting
+     */
     public function test_local_greetings_null_user(): void {
         $this->resetAfterTest();
 
@@ -47,6 +54,11 @@ final class lib_test extends \advanced_testcase {
         $this->assertEquals($expected, $result);
     }
 
+    /**
+     * Tests the greeting for a user from Australia.
+     *
+     * @covers ::local_greetings_get_greeting
+     */
     public function test_local_greetings_au_user(): void {
         $this->resetAfterTest();
 
